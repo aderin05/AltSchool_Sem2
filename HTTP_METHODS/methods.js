@@ -12,6 +12,12 @@ const server = http.createServer((req, res) => {
         updateBooks(req, res)
     } else if (req.url === '/books' && req.method === "DELETE") {
         deleteBooks(req, res)
+    } else if (req.url === '/books/author' && req.method === "GET"){
+        getAuthor(req, res)
+    } else if (req.url === '/books/author' && req.method === "POST"){
+        addAuthor(req, res)
+    } else if (req.url === '/books/author' && req.method === "GET"){
+        updateAuthor(req, res)
     }
 })
 
@@ -115,14 +121,36 @@ function getAllBooks(req, res){
  }
 
  function getAuthor(req, res){
-    fs.readFile(pathToBooks, "utf-8", (error, data) => {
-        if(error){
-            console.log(error);
-            res.writeHead(400);
-            res.end("An error occurred");
-        }
-        res.end(data);
+    const body = []
+
+    req.on("data", (chunk) => {
+        body.push(chunk);
     })
+
+    req.on("end", () => {
+        const parsedBook = Buffer.concat(body).toString();
+        const booksByAuthor = JSON.parse(parsedBook);
+        const bookAuthor = booksByAuthor.author;
+
+        fs.readFile(pathToBooks, "utf-8", (error, books) => {
+            if(error){
+                console.log(error);
+                res.writeHead(400);
+                res.end("An error occurred");
+            }
+
+            const booksObj = JSON.parse(books);
+            
+            for(i = 0; i < booksObj.length; i++){
+                const booksAuthor = booksObj[i].author;
+                const book = booksObj[i];
+                if(bookAuthor === booksAuthor){
+                    console.log(book); 
+                }  
+            }    
+        })
+    })
+    
  }
 
  function addAuthor(req, res){
