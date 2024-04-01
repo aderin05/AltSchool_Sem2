@@ -36,7 +36,7 @@ function getAllBooks(req, res){
     req.on("end", () => {
         const parsedBook = Buffer.concat(body).toString();
         const bookUpdate = JSON.parse(parsedBook);
-        const bookId = bookUpdate.Id
+        const bookId = bookUpdate.id
     
         fs.readFile(pathToBooks, "utf8", (error, books) =>{
             if(error){
