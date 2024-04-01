@@ -67,7 +67,7 @@ function getAllBooks(req, res){
                 res.writeHead(500);
                 res.end("An error occurred");
             }
-            // res.writeHead(200);
+            res.writeHead(200);
             res.end("Update Successful");
             });
         })
@@ -141,16 +141,16 @@ function getAllBooks(req, res){
             
 
             const booksObj = JSON.parse(books);
-            var authorBooks;
+            var authorBooks = [];
             
             for(i = 0; i < booksObj.length; i++){
                 var booksAuthor = booksObj[i].author;
-                authorBooks = booksObj[i];
                 if(bookAuthor === booksAuthor){
-                    console.log(authorBooks); 
+                    authorBooks.push(booksObj[i]); 
                 }                  
             } 
-            res.end(JSON.stringify(authorBooks))
+            res.writeHead(200, {'Content-Type': 'application/json'});
+            res.end(JSON.stringify(authorBooks));
             
         })
     })
