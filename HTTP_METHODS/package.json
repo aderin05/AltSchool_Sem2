@@ -1,0 +1,11 @@
+{
+  "name": "http_methods",
+  "version": "1.0.0",
+  "description": "Different methods used in server processes",
+  "main": "methods.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
