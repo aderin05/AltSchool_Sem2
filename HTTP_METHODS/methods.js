@@ -71,6 +71,46 @@ function getAllBooks(req, res){
  }
 
  function deleteBooks(req, res){
+    const body = []
+
+    req.on("data", (chunk) => {
+        body.push(chunk);
+    })
+
+    req.on("end", () => {
+        const parsedBook = Buffer.concat(body).toString();
+        const bookToDelete = JSON.parse(parsedBook);
+        const bookId = bookToDelete.id
+    
+        fs.readFile(pathToBooks, "utf8", (error, books) =>{
+            if(error){
+                console.log(error);
+                res.writeHead(400);
+                res.end("An error occurred");
+            }
+            const booksObj = JSON.parse(books);
+
+            const booksIndex = booksObj.findIndex(book => book.id === bookId)
+        
+            if(booksIndex === -1){
+                res.writeHead(404);
+                res.end("Book with specified id not found");
+            }
+
+            booksObj.splice(booksIndex, 1);
+            
+
+            fs.writeFile(pathToBooks, JSON.stringify(booksObj), (error) => {
+            if(error){
+                console.log(error);
+                res.writeHead(500);
+                res.end("An error occurred");
+            }
+            // res.writeHead(200);
+            res.end("Book Deleted Successfully");
+            });
+        })
+    })
 
  }
 
