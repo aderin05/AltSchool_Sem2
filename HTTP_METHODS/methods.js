@@ -16,7 +16,7 @@ const server = http.createServer((req, res) => {
         getAuthor(req, res)
     } else if (req.url === '/books/author' && req.method === "POST"){
         addAuthor(req, res)
-    } else if (req.url === '/books/author' && req.method === "GET"){
+    } else if (req.url === '/books/author' && req.method === "PUT"){
         updateAuthor(req, res)
     }
 })
@@ -138,16 +138,20 @@ function getAllBooks(req, res){
                 res.writeHead(400);
                 res.end("An error occurred");
             }
+            
 
             const booksObj = JSON.parse(books);
+            var authorBooks;
             
             for(i = 0; i < booksObj.length; i++){
-                const booksAuthor = booksObj[i].author;
-                const book = booksObj[i];
+                var booksAuthor = booksObj[i].author;
+                authorBooks = booksObj[i];
                 if(bookAuthor === booksAuthor){
-                    console.log(book); 
-                }  
-            }    
+                    console.log(authorBooks); 
+                }                  
+            } 
+            res.end(JSON.stringify(authorBooks))
+            
         })
     })
     
