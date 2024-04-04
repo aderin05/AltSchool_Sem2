@@ -15,10 +15,26 @@ const server = http.createServer((req, res) => {
                 res.writeHead(400);
                 res.end(JSON.stringify({message : error}))
             })
-    } else if (req.url === '/books' && req.method === "PUT") { // Update
+    } else if (req.url === '/books' && req.method === "POST") { 
+        authenticate(req, res)
+            .then(() => {
+                addBooks(req, res)
+            }).catch((error) => {
+                res.writeHead(400);
+                res.end(JSON.stringify({message : err}))
+            })
+    }else if (req.url === '/books' && req.method === "PUT") { 
         authenticate(req, res)
             .then(() => {
                 updateBooks(req, res)
+            }).catch((error) => {
+                res.writeHead(400);
+                res.end(JSON.stringify({message : err}))
+            })
+    } else if (req.url === '/books' && req.method === "PATCH") { 
+        authenticate(req, res)
+            .then(() => {
+                modifyBooks(req, res)
             }).catch((error) => {
                 res.writeHead(400);
                 res.end(JSON.stringify({message : err}))
@@ -51,6 +67,22 @@ const server = http.createServer((req, res) => {
         authenticate(req, res)
             .then(() => {
                 updateAuthor(req, res)
+            }).catch((error) => {
+                res.writeHead(400);
+                res.end(JSON.stringify({message : err}))
+            })
+    } else if (req.url === '/books/author' && req.method === "PATCH"){
+        authenticate(req, res)
+            .then(() => {
+                modifyAuthor(req, res)
+            }).catch((error) => {
+                res.writeHead(400);
+                res.end(JSON.stringify({message : err}))
+            })
+    } else if (req.url === '/books/author' && req.method === "DELETE"){
+        authenticate(req, res)
+            .then(() => {
+                deleteAuthor(req, res)
             }).catch((error) => {
                 res.writeHead(400);
                 res.end(JSON.stringify({message : err}))
