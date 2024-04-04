@@ -4,20 +4,57 @@ const path = require('path');
 const pathToBooks  = path.join(__dirname, 'books.json');
 const PORT = 2000;
 const HOST_NAME = 'localhost';
+const {authenticate} = require('./authenticate');
 
 const server = http.createServer((req, res) => {
     if (req.url === '/books' && req.method === "GET") { 
-        getAllBooks(req, res)
+        authenticate(req, res)
+            .then(() => {
+                getAllBooks(req, res)
+            }).catch((error) => {
+                res.writeHead(400);
+                res.end(JSON.stringify({message : error}))
+            })
     } else if (req.url === '/books' && req.method === "PUT") { // Update
-        updateBooks(req, res)
+        authenticate(req, res)
+            .then(() => {
+                updateBooks(req, res)
+            }).catch((error) => {
+                res.writeHead(400);
+                res.end(JSON.stringify({message : err}))
+            })
     } else if (req.url === '/books' && req.method === "DELETE") {
-        deleteBooks(req, res)
+        authenticate(req, res)
+            .then(() => {
+                deleteBooks(req, res)
+            }).catch((error) => {
+                res.writeHead(400);
+                res.end(JSON.stringify({message : err}))
+            })
     } else if (req.url === '/books/author' && req.method === "GET"){
-        getAuthor(req, res)
+        authenticate(req, res)
+            .then(() => {
+                getAuthor(req, res)
+            }).catch((error) => {
+                res.writeHead(400);
+                res.end(JSON.stringify({message : err}))
+            })
     } else if (req.url === '/books/author' && req.method === "POST"){
-        addAuthor(req, res)
+        authenticate(req, res)
+            .then(() => {
+                addAuthor(req, res)
+            }).catch((error) => {
+                res.writeHead(400);
+                res.end(JSON.stringify({message : err}))
+            })
     } else if (req.url === '/books/author' && req.method === "PUT"){
-        updateAuthor(req, res)
+        authenticate(req, res)
+            .then(() => {
+                updateAuthor(req, res)
+            }).catch((error) => {
+                res.writeHead(400);
+                res.end(JSON.stringify({message : err}))
+            })
     }
 })
 
